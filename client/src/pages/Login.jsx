@@ -22,17 +22,23 @@ export default function Login() {
     } catch (e) { setError(e.message); } finally { setBusy(false); }
   }
 
+  function continueDemo() {
+    auth.signIn({ token: 'demo-token', user: { name: 'Demo User', email: 'demo@example.com', role: 'admin' } });
+    navigate(location.state?.from?.pathname || '/', { replace: true });
+  }
+
   return (
     <main className="auth-page">
       <form className="auth-card" onSubmit={submit}>
         <div className="brand">◆ Order<span>Insights</span></div>
         <h1>{mode === 'login' ? 'Welcome back' : 'Create your user account'}</h1>
-        <p className="muted">{mode === 'login' ? 'Sign in to access your workspace.' : 'User accounts can access customer insights only.'}</p>
+        <p className="muted">{mode === 'login' ? 'Sign in to access your workspace, or use the demo data below.' : 'User accounts can access customer insights only.'}</p>
         {mode === 'register' && <input required placeholder="Full name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />}
         <input required type="email" placeholder="Email address" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
         <input required minLength="8" type="password" placeholder="Password (8+ characters)" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
         {error && <div className="auth-error">{error}</div>}
         <button className="btn primary" disabled={busy}>{busy ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'}</button>
+        {mode === 'login' && <button type="button" className="btn" onClick={continueDemo}>Continue with demo data</button>}
         <button type="button" className="auth-switch" onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); }}>
           {mode === 'login' ? 'New user? Create an account' : 'Already have an account? Sign in'}
         </button>

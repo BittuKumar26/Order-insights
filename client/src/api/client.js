@@ -1,6 +1,8 @@
 import { token } from '../auth';
+import { mockRequest } from './mock';
 
 const BASE = import.meta.env.VITE_API_URL || '/api';
+const USE_MOCK_API = import.meta.env.VITE_DEMO_MODE !== 'false';
 
 export const qs = (params = {}) => {
   const p = new URLSearchParams();
@@ -10,6 +12,7 @@ export const qs = (params = {}) => {
 };
 
 async function request(path, { method = 'GET', body, signal } = {}) {
+  if (USE_MOCK_API) return mockRequest(path, { method, body });
   let res;
   try {
     const headers = {};
