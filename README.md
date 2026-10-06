@@ -12,6 +12,25 @@ npm test            # backend unit tests (no DB needed)
 ```
 Open the UI → **Data Ingest → Load sample data**, then go to **Dashboard**.
 
+## Deploy the backend to Render
+
+Set the Render service root directory to `server`, build command to `npm install`,
+and start command to `npm start`. The service must define these environment variables:
+
+| Variable | Required | Value |
+|---|---:|---|
+| `MONGO_URI` | Yes | Hosted MongoDB connection string (for example MongoDB Atlas; never a localhost URI) |
+| `JWT_SECRET` | Yes | Long random secret used to sign session tokens |
+| `CLIENT_ORIGIN` | Yes in production | Deployed frontend URL, or comma-separated frontend URLs |
+| `NODE_ENV` | Recommended | `production` |
+| `ADMIN_NAME` | Optional | Display name for the first configured login |
+| `ADMIN_EMAIL` | Optional | Email for the first configured login |
+| `ADMIN_PASSWORD` | Optional | Password for the first configured login |
+
+`PORT` is supplied by Render automatically. The server validates required
+configuration, reports database and HTTP startup errors, and listens on
+`0.0.0.0` for Render's health checks and traffic.
+
 ## Authentication
 The UI starts at `/login`. New accounts can register as users. Any authenticated account can use the dashboard, view analytics, upload orders/products/shipments, and reset or load sample data.
 
